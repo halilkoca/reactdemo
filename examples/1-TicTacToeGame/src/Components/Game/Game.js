@@ -6,13 +6,12 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      history: [
-        {
-          squares: Array(9).fill(null)
-        }
-      ],
+      history: [{
+        squares: Array(9).fill(null),
+        currentInfos: Array(2).fill(null)
+      }],
       stepNumber: 0,
-      xIsNext: true
+      xIsNext: true,
     };
   }
 
@@ -20,18 +19,22 @@ class Game extends React.Component {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
+    const rowColum = current.currentInfos.slice();
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
+    rowColum[0] = calculateRowColumn(i).row;
+    rowColum[1] = calculateRowColumn(i).column;
     squares[i] = this.state.xIsNext ? "X" : "O";
     this.setState({
       history: history.concat([
         {
-          squares: squares
+          squares: squares,
+          currentInfos: rowColum
         }
       ]),
       stepNumber: history.length,
-      xIsNext: !this.state.xIsNext
+      xIsNext: !this.state.xIsNext,
     });
   }
 
@@ -49,7 +52,7 @@ class Game extends React.Component {
 
     const moves = history.map((step, move) => {
       const desc = move ?
-        'Go to move #' + move :
+        'Go to move #' + move + ' row: ' + step.currentInfos[0] + ' column: ' + step.currentInfos[1] :
         'Go to game start';
       return (
         <li key={move}>
@@ -102,4 +105,14 @@ function calculateWinner(squares) {
     }
   }
   return null;
+}
+
+function calculateRowColumn(i) {
+  i++;
+  let row = i % 3 == 0 ? i / 3 : Math.ceil(i / 3);
+  let column = i % 3 == 0 ? 3 : i % 3;
+  return {
+    "row": row,
+    "column": column
+  }
 }
