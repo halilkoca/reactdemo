@@ -2,22 +2,27 @@ import React from "react";
 import "./Square.css";
 
 class Square extends React.Component {
+  // constructor(props) {
+  //   super(props);
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      value: null,
-    }
-  }
-
-
+  //   this.state = {
+  //     value: null
+  //   };
+  // }
 
   render() {
     return (
-      //<button className="square" onClick={function () { alert("click"); }}></button>
-      <button className="square" onClick={() => { alert("click"); }}>
-        {this.state.value}
+      //1. <button className="square" onClick={function () { alert("click"); }}></button>
+      //2. <button className="square" onClick={() => { alert("click"); }}>
+      <button
+        className="square"
+        // onClick={() => { this.setState({ value: "X" }); }}
+        onClick={() => this.props.onClick()}
+      >
+        {
+          this.props.value
+          /* {this.state.value} */
+        }
       </button>
     );
   }
